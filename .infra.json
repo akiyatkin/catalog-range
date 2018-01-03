@@ -1,0 +1,6 @@
+{
+	"js":"infra.js",
+	"catalog-filter":"layout.tpl",
+	"update":"update.php",
+	"require":"infra.php"
+}

@@ -1,0 +1,6 @@
+{
+	"name":"akiyatkin/catalog-range",
+	"require":{
+		"infrajs/catalog":"~1"
+	}
+}
