@@ -52,7 +52,7 @@ Event::handler('Catalog.option', function (&$param) {
 		if (!$block['step']) $block['step'] = 1;
 	} else {
 		$ns = round($dif/$tik);
-		if ($step > $ns) $block['step'] = $step;
+		if ($step > $ns) $block['step'] = round($step);
 		else $block['step'] = $ns;
 	}
 	$ost = $dif % $block['step'];
