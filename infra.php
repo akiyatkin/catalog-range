@@ -8,31 +8,57 @@ Event::handler('Catalog.option', function (&$param) {
 	$opt = &$param['option'];
 	$block = &$param['block'];
 	if ($opt['type'] != 'number') return;
+	if (sizeof($opt['values']) < 5) return;
 	$block['layout'] = 'range';	
 
 	$block['max'] = (int) $opt['values'][0]['title'];
 	$block['min'] = $block['max'];
-	$step = 1;
+	
+	$step = 0;
 	$values = array();
 	foreach ($opt['values'] as $k => $val) {
 		$vt = $opt['values'][$k]['title'];
 		$v = (float) $vt;
 		$values[] = $v;
-		if ($v < $block['min']) {
+		if ($v <= $block['min']) {
 			$d = $block['min'] - $v;
-			if ($d < $step) $step = $d;
-			
 			$block['min'] = $v;
-		} else if ($v > $block['max']) {
+			if ($d && (!$step || $d < $step)) $step = $d;
+		} else if ($v >= $block['max']) {
 			$d = $v - $block['max'];
-			if ($d < $step) $step = $d;
 			$block['max'] = $v;
+			if ($d && (!$step || $d < $step)) $step = $d;
 		}
+		
 	}
-	$d = $block['max'] - $block['min'];
-	$dstep = $d/100;
+
+	$tik = 20; //Максимальное количество шагов
+	
+	$block['min'] = floor($block['min']);
+	$block['max'] = ceil($block['max']);
+
+	$dif = $block['max'] - $block['min'];
+	$dstep = $dif/$tik;
 	if ($step < $dstep) $step = $dstep;
-	$block['step'] = round($step,5);
+
+	if ($dif < 1) {
+		$block['step'] = round($step,2);
+		if (!$block['step']) $block['step'] = 0.01;
+	} else if ($dif == 1) {
+		$block['step'] = round($step,1);
+		if (!$block['step']) $block['step'] = 0.1;
+	} else if ($dif <= $tik) {
+		$block['step'] = round($step);
+		if (!$block['step']) $block['step'] = 1;
+	} else {
+		$ns = round($dif/$tik);
+		if ($step > $ns) $block['step'] = $step;
+		else $block['step'] = $ns;
+	}
+	$ost = $dif % $block['step'];
+	if ($ost) {//Есть остаток от деления
+		$block['max'] = $block['max'] + $block['step'] - $ost; //Добавляем к max для ровного деления
+	}
 
 
 	$block['minval'] = $block['min'];
@@ -48,6 +74,16 @@ Event::handler('Catalog.option', function (&$param) {
 			$block['maxval'] = $r[0];
 		}
 	}
+	if ($block['minval'] == $block['maxval']) {
+		$block['minval'] = $block['minval'] - $block['step'];
+		$block['maxval'] = $block['maxval'] + $block['step'];
+		if ($block['minval'] < $block['min']) $block['minval'] = $block['min'];
+		if ($block['maxval'] < $block['max']) $block['maxval'] = $block['max'];
+	}
+
+	if ($block['maxval'] > $block['max']) $block['maxval'] = $block['max'];
+	if ($block['minval'] < $block['min']) $block['minval'] = $block['min'];
+
 
 	if (sizeof($opt['values']) > 20) {
 		$values = array();

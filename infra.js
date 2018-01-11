@@ -9,7 +9,7 @@ Event.handler('Controller.onshow', function () {
 		
 		var m = range.data('m');
 		var path = range.data('path');
-
+		var step = Number(min.attr('step'));
 		if (range.data('path') == "cost") {
 			var pr = function(txt){
 				return Template.scope['~cost'](txt);
@@ -19,30 +19,40 @@ Event.handler('Controller.onshow', function () {
 				return txt;
 			}	
 		}
-		var set = function(){
+		var set = function () {
 			maxval.html(pr(max.val()));
 			minval.html(pr(min.val()));
 		}
+		var go = function () {
+			Ascroll.once = false;
+			console.log(min.attr('min'));
+			if (min.attr('min') == min.val() && min.attr('max') == max.val()) {
+				Crumb.go('/catalog?m=' + m + ':'+path+'.minmax');
+			}else if (min.val() == max.val()) {
+				var minv = min.val() - step;
+				var maxv = Number(max.val()) + step;
+				console.log(maxv,typeof(maxv));
+				if (minv < min.attr('min')) minv = min.attr('min');
+				if (maxv > min.attr('max')) maxv = min.attr('max');
+
+				Crumb.go('/catalog?m=' + m + ':' + path + '.minmax=' + minv + '/' + maxv);
+			} else {
+				Crumb.go('/catalog?m=' + m + ':' + path + '.minmax='+min.val()+'/'+max.val());
+			}
+			
+		}
 		
 		range.find('.min').change( function (){
-
 			if (Number(max.val()) < Number(min.val())) max.val(min.val());
 			set();
-
-			Ascroll.once = false;
-			Crumb.go('/catalog?m=' + m + ':'+path+'.minmax='+min.val()+'/'+max.val());
-			
+			go();
 		}).mousemove(function(){
 			set();
 		});
 		range.find('.max').change( function (){
-
 			if (Number(max.val()) < Number(min.val())) min.val(max.val());
 			set();
-
-			Ascroll.once = false;
-			Crumb.go('/catalog?m=' + m + ':'+path+'.minmax='+min.val()+'/'+max.val());
-
+			go();
 		}).mousemove(function(){
 			set();
 		});
