@@ -55,9 +55,11 @@ Event::handler('Catalog.option', function (&$param) {
 		if ($step > $ns) $block['step'] = round($step);
 		else $block['step'] = $ns;
 	}
-	$ost = $dif % $block['step'];
-	if ($ost) {//Есть остаток от деления
-		$block['max'] = $block['max'] + $block['step'] - $ost; //Добавляем к max для ровного деления
+	if ($block['step'] > 1) {
+		$ost = $dif % $block['step'];
+		if ($ost) {//Есть остаток от деления
+			$block['max'] = $block['max'] + $block['step'] - $ost; //Добавляем к max для ровного деления
+		}
 	}
 
 
