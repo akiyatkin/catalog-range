@@ -91,21 +91,4 @@ Event::handler('Catalog.option', function (&$param) {
 		$values = array();
 	}
 	$block['values'] = $values;
-
-
-	/*if ($opt['type'] == 'range') {
-		usort($opt['values'], function ($v1, $v2){
-			//if ($v1['filter']>$v2['filter']) return -1;
-			//if ($v1['filter']<$v2['filter']) return 1;
-			if ($v1['title']>$v2['title']) return 1;
-			if ($v1['title']<$v2['title']) return -1;
-		});
-	}*/
-
-	/*if(sizeof($opt['values'])==1){
-		if($opt['yes'] == $count){//Значение есть у всех позиций и только один вариант
-			unset($params[$k]);
-			continue;
-		}
-	}*/
 });

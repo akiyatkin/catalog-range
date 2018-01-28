@@ -25,7 +25,6 @@ Event.handler('Controller.onshow', function () {
 		}
 		var go = function () {
 			Ascroll.once = false;
-			console.log(min.attr('min'));
 			if (min.attr('min') == min.val() && min.attr('max') == max.val()) {
 				Crumb.go('/catalog?m=' + m + ':'+path+'.minmax');
 			}else if (min.val() == max.val()) {

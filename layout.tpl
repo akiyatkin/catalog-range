@@ -1,4 +1,4 @@
-{blocks-range:}
+{layout-range:}
 	<div style="margin-top:5px; border-bottom:1px solid #ddd">
 
 		<div>

@@ -1,6 +1,5 @@
 {
 	"js":"infra.js",
-	"catalog-filter":"layout.tpl",
 	"dependencies":"event",
 	"update":"update.php",
 	"require":"infra.php"
