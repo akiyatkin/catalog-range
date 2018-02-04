@@ -91,4 +91,4 @@ Event::handler('Catalog.option', function (&$param) {
 		$values = array();
 	}
 	$block['values'] = $values;
-});
+},'range');
